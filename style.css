@@ -18,6 +18,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  
 }
 
 header {
@@ -37,6 +38,7 @@ main {
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: var(--gris-texto);
 }
 
 h1, h2, h3 {
@@ -76,11 +78,13 @@ button:hover {
   background: var(--degradado-azul);
   padding: 25px;
   border-radius: 10px;
-  color: var(--blanco-piedra);
+  color: var(--gris-texto);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ---------- FORMULARIOS ---------- */
+.oculto {
+  display: none;
+}
 
 label {
   display: block;
@@ -88,7 +92,8 @@ label {
   font-weight: 500;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -105,21 +110,18 @@ table {
   background-color: var(--blanco-piedra);
   border-radius: 8px;
   overflow: hidden;
-  font-size: 14px;
+}
+
+th {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  color: #D4AF37;
 }
 
 th {
   background-color: var(--hueso-suave);
   color: var(--dorado-metalico);
-  padding: 10px;
-  text-align: left;
-}
-
-td {
-  background-color: var(--dorado-metalico);
-  color: var(--blanco-piedra);
-  padding: 8px;
-  text-align: center;
 }
 
 tr:nth-child(even) {
@@ -130,6 +132,11 @@ tr:hover {
   background-color: var(--dorado-metalico);
   color: var(--blanco-piedra);
   cursor: pointer;
+}
+
+td{
+  background-color: var(--dorado-metalico);
+  color: var(--blanco-piedra);
 }
 
 /* ---------- FOOTER ---------- */
@@ -158,7 +165,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* ---------- ESTADOS Y MENSAJES ---------- */
+/* ---------- MENSAJES Y ESTADOS ---------- */
 
 .error {
   color: red;
@@ -183,40 +190,6 @@ footer a:hover {
   width: 50px;
   height: 50px;
 }
-
-/* ---------- OCULTAR ELEMENTOS ---------- */
-
-.oculto {
-  display: none;
-}
-
-/* ---------- SECCIÓN SERVICIOS ---------- */
-
-#servicios {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  color: #444;
-}
-
-/* ---------- BOTÓN HAMBURGUESA ---------- */
-
-.menu-toggle {
-  display: none;
-  background: var(--dorado-metalico);
-  color: white;
-  border: none;
-  font-size: 24px;
-  padding: 10px;
-  cursor: pointer;
-  margin-top: 10px;
-  border-radius: 5px;
-}
-
 /* ============================
    📱 CELULARES PEQUEÑOS (≤ 480px)
 ============================ */
@@ -245,38 +218,23 @@ footer a:hover {
 
   input,
   select {
+    width: 100%;
     font-size: 13px;
   }
 
-  table {
+  table,
+  th,
+  td {
     font-size: 12px;
+    padding: 5px;
   }
 
   h1, h2, h3 {
     font-size: 1.2rem;
     text-align: center;
   }
-
-  #menu {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 15px;
-  }
-
-  #menu.mostrar {
-    display: flex;
-  }
-
-  .menu-toggle {
-    display: block;
-    margin: 0 auto;
-  }
-
-  #menu button {
-    max-width: 300px;
-  }
 }
+
 
 /* ============================
    📱 TABLETAS MEDIANAS (481px - 1024px)
@@ -301,17 +259,22 @@ footer a:hover {
 
   input,
   select {
+    width: 95%;
     font-size: 14px;
   }
 
-  table {
+  table,
+  th,
+  td {
     font-size: 14px;
+    padding: 8px;
   }
 
   h1, h2, h3 {
     font-size: 1.5rem;
   }
 }
+
 
 /* ============================
    🖥️ PANTALLAS GRANDES (≥ 1025px)
@@ -341,3 +304,83 @@ footer a:hover {
   }
 }
 
+
+/* Botón hamburguesa oculto por defecto */
+.menu-toggle {
+  display: none;
+  background: var(--dorado-metalico);
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+/* Solo visible en móviles */
+@media (max-width: 480px) {
+  #menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  #menu.mostrar {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+    margin: 0 auto;
+  }
+
+  #menu button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+
+.oculto {
+  display: none;
+}
+
+
+#servicios {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  color: #444;
+}
+
+
+.oculto {
+  display: none;
+}
+
+.contenido {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.contenido table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contenido th, .contenido td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}

@@ -442,3 +442,24 @@ function cerrarSesion() {
 function generarReferencia() {
   return "REF" + Math.floor(100000 + Math.random() * 900000);
 }
+
+// =============================
+// Menú hamburguesa (solo móviles)
+// =============================
+const toggleBtn = document.getElementById("hamburguesa");
+const menuNav = document.getElementById("menu");
+
+// Mostrar u ocultar el menú al hacer clic en el botón
+toggleBtn.addEventListener("click", () => {
+  menuNav.classList.toggle("mostrar");
+});
+
+// Cerrar el menú automáticamente si se hace clic en una opción del menú
+const botonesMenu = menuNav.querySelectorAll("button");
+botonesMenu.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (window.innerWidth <= 768) {
+      menuNav.classList.remove("mostrar");
+    }
+  });
+});
