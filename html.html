@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Banco Virtual</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Firebase App (base) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<!-- Firebase Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
 </head>
 <body>
   <header>
@@ -14,10 +19,14 @@
   <main>
     <h1>Bienvenido al Banco Virtual</h1>
 
+    <h2 id="nombre-usuario"></h2>
+
     <section id="resumen">
-      <p><strong>Número de cuenta:</strong> <span id="cuenta">---</span></p>
-      <p><strong>Saldo actual:</strong> $<span id="saldo">0</span></p>
-      <p><strong>Fecha de creación:</strong> <span id="fecha">---</span></p>
+      <p><strong>Titular:</strong> <span id="titular">---</span></p>
+<p><strong>Número de cuenta:</strong> <span id="numero-cuenta">---</span></p>
+<p><strong>Saldo actual:</strong> <span id="saldo">$0</span></p>
+<p><strong>Fecha de creación:</strong> <span id="fecha-creacion">---</span></p>
+
     </section>
 
     <button id="hamburguesa" class="menu-toggle">☰</button>
@@ -86,8 +95,8 @@
 
     <section id="certificado" class="contenido oculto">
       <h2>Certificado Bancario</h2>
-      <p><strong>Banco:</strong> Banco Virtual de Daniel</p>
-      <p><strong>Titular:</strong> Daniel Santiago González Hernández</p>
+      <p><strong>Banco:</strong>Acme Bank</p>
+      <p><strong>Titular:</strong> <span id="titular"></span></p>
       <p><strong>Número de cuenta:</strong> <span id="certCuenta"></span></p>
       <p><strong>Saldo actual:</strong> $<span id="certSaldo"></span></p>
       <p><strong>Fecha de creación:</strong> <span id="certFecha"></span></p>
