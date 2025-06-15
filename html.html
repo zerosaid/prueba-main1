@@ -57,12 +57,30 @@
       </div>
     </section>
 
-    <section id="retiro" class="contenido oculto">
-      <h2>Retiro de Dinero</h2>
-      <label for="montoRetiro">Cantidad a retirar:</label>
-      <input type="number" id="montoRetiro" min="0" step="500" required />
-      <button onclick="realizarRetiro()">Confirmar retiro</button>
+    <section id="retiro" class="oculto">
+      <h2>Retiro de Efectivo</h2>
+      <p>Cuenta: <strong id="cuentaUsuarioRetiro">---</strong></p>
+      <p>Nombre: <strong id="nombreUsuarioRetiro">---</strong></p>
+      <input type="number" id="montoRetirar" placeholder="Monto a retirar" />
+      <button onclick="realizarRetiro()">Confirmar Retiro</button>
+    
+      <div id="resumenRetiro" class="oculto">
+        <p id="detalleRetiro"></p>
+      </div>
     </section>
+    
+    <section id="deposito" class="oculto">
+      <h2>Depósito en Oficina</h2>
+      <p>Cuenta: <strong id="cuentaUsuarioDeposito">---</strong></p>
+      <p>Nombre: <strong id="nombreUsuarioDeposito">---</strong></p>
+      <input type="number" id="montoDepositar" placeholder="Monto a depositar" />
+      <button onclick="realizarDeposito()">Confirmar Depósito</button>
+    
+      <div id="resumenDeposito" class="oculto">
+        <p id="detalleDeposito"></p>
+      </div>
+    </section>
+    
 
     <section id="contenido" class="contenido oculto">
       <!-- Aquí se insertará el formulario de depósito dinámicamente con innerHTML -->
@@ -96,6 +114,7 @@
         <button onclick="window.print()">Imprimir resumen</button>
       </div>
     </section>
+    
 
     <section id="certificado" class="contenido oculto">
       <h2>Certificado Bancario</h2>
@@ -120,7 +139,9 @@
             <th>Valor</th>
           </tr>
         </thead>
-        <tbody id="cuerpoTablaTransacciones"></tbody>
+        <tbody id="cuerpoTablaTransacciones">
+          <!-- Las filas se generan aquí -->
+        </tbody>
       </table>
       <button onclick="window.print()">Imprimir resumen</button>
     </section>
