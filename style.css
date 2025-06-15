@@ -1,0 +1,348 @@
+:root {
+  --dorado-metalico: #D4AF37;
+  --blanco-piedra: #FFFFFF;
+  --degradado-azul: linear-gradient(to right, #00b7eb, #0087d1);
+  --hueso-suave: #F1E1B0;
+  --gris-claro-elegante: #E6E3E3;
+  --gris-texto: #333333;
+}
+
+/* ---------- ESTRUCTURA GENERAL ---------- */
+
+body {
+  background-color: var(--blanco-piedra);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  color: var(--gris-texto);
+  background-image: url(./imagenes/Image_13_jun_2025_03_00_17_p.m..webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  
+}
+
+header {
+  background: var(--degradado-azul);
+  color: var(--dorado-metalico);
+  text-align: center;
+  padding: 20px;
+  text-shadow: 0 0 2px #666;
+}
+
+/* ---------- CONTENIDO PRINCIPAL ---------- */
+
+main {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: var(--gris-claro-elegante);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: var(--gris-texto);
+}
+
+h1, h2, h3 {
+  color: var(--dorado-metalico);
+  text-shadow: 0 0 1px darkgray;
+}
+
+/* ---------- MENÚ DE BOTONES ---------- */
+
+#menu {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  background-color: var(--hueso-suave);
+  color: #444;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s;
+}
+
+button:hover {
+  background-color: var(--dorado-metalico);
+  color: var(--blanco-piedra);
+}
+
+/* ---------- SECCIONES DE CONTENIDO ---------- */
+
+.contenido {
+  margin-top: 30px;
+  background: var(--degradado-azul);
+  padding: 25px;
+  border-radius: 10px;
+  color: var(--blanco-piedra);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.oculto {
+  display: none;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: 500;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+/* ---------- TABLAS ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: var(--blanco-piedra);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  color: #D4AF37;
+}
+
+th {
+  background-color: var(--hueso-suave);
+  color: var(--dorado-metalico);
+}
+
+tr:nth-child(even) {
+  background-color: var(--gris-claro-elegante);
+}
+
+tr:hover {
+  background-color: var(--dorado-metalico);
+  color: var(--blanco-piedra);
+  cursor: pointer;
+}
+
+td{
+  background-color: var(--dorado-metalico);
+  color: var(--blanco-piedra);
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: var(--degradado-azul);
+  color: var(--dorado-metalico);
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+footer a {
+  color: var(--dorado-metalico);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- MENSAJES Y ESTADOS ---------- */
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.loading img {
+  width: 50px;
+  height: 50px;
+}
+/* ============================
+   📱 CELULARES PEQUEÑOS (≤ 480px)
+============================ */
+@media (max-width: 480px) {
+  header {
+    padding: 15px;
+    font-size: 1rem;
+  }
+
+  main {
+    margin: 20px 10px;
+    padding: 20px;
+  }
+
+  .window-cont,
+  .window-regis-cont {
+    width: 90%;
+    margin-top: 20%;
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  table,
+  th,
+  td {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  h1, h2, h3 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+}
+
+
+/* ============================
+   📱 TABLETAS MEDIANAS (481px - 1024px)
+============================ */
+@media (min-width: 481px) and (max-width: 1024px) {
+  main {
+    margin: 30px 20px;
+    padding: 25px;
+  }
+
+  .window-cont,
+  .window-regis-cont {
+    width: 70%;
+    margin-top: 10%;
+    padding: 20px;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px 16px;
+  }
+
+  input,
+  select {
+    width: 95%;
+    font-size: 14px;
+  }
+
+  table,
+  th,
+  td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  h1, h2, h3 {
+    font-size: 1.5rem;
+  }
+}
+
+
+/* ============================
+   🖥️ PANTALLAS GRANDES (≥ 1025px)
+============================ */
+@media (min-width: 1025px) {
+  main {
+    max-width: 1000px;
+    margin: 40px auto;
+  }
+
+  .window-cont,
+  .window-regis-cont {
+    width: 40%;
+  }
+
+  input,
+  select {
+    font-size: 15px;
+  }
+
+  table {
+    font-size: 15px;
+  }
+
+  h1, h2, h3 {
+    font-size: 2rem;
+  }
+}
+
+
+/* Botón hamburguesa oculto por defecto */
+.menu-toggle {
+  display: none;
+  background: var(--dorado-metalico);
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+/* Solo visible en móviles */
+@media (max-width: 480px) {
+  #menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  #menu.mostrar {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+    margin: 0 auto;
+  }
+
+  #menu button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+
+.oculto {
+  display: none;
+}

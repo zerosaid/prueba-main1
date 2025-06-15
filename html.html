@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">Add commentMore actions
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Banco Virtual</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h2>Banco Virtual de Daniel</h2>
+  </header>
+
+  <main>
+    <h1>Bienvenido al Banco Virtual</h1>
+
+    <section id="resumen">
+      <p><strong>Número de cuenta:</strong> <span id="cuenta">---</span></p>
+      <p><strong>Saldo actual:</strong> $<span id="saldo">0</span></p>
+      <p><strong>Fecha de creación:</strong> <span id="fecha">---</span></p>
+    </section>
+
+    <button id="hamburguesa" class="menu-toggle">☰</button>
+    <section id="menu">
+      <button onclick="mostrarOpcion('consignacion')">Consignación electrónica</button>
+      <button onclick="mostrarOpcion('retiro')">Retiro</button>
+      <button onclick="mostrarOpcion('deposito')">Depósito</button>
+      <button onclick="mostrarOpcion('reporte')">Ver reporte</button>
+      <button onclick="mostrarOpcion('resumen')">Resumen de transacciones</button>
+      <button onclick="mostrarOpcion('servicios')">Pago de servicios públicos</button>
+      <button onclick="mostrarOpcion('certificado')">Certificado bancario</button>
+      <button onclick="mostrarOpcion('cerrar')">Cerrar sesión</button>
+    </section>
+
+    <section id="consignacion" class="contenido oculto">
+      <h2>Consignación Electrónica</h2>
+      <p><strong>Número de cuenta:</strong> <span id="cuentaUsuario">1234567890</span></p>
+      <p><strong>Nombre del usuario:</strong> <span id="nombreUsuario">Daniel Santiago González Hernández</span></p>
+      <label for="montoConsignar">Cantidad a consignar:</label>
+      <input type="number" id="montoConsignar" min="0" step="500" required />
+      <button onclick="realizarConsignacion()">Confirmar consignación</button>
+      <div id="resumenConsignacion" class="oculto">
+        <h3>Resumen de consignación</h3>
+        <p id="detalleConsignacion"></p>
+        <button onclick="window.print()">Imprimir resumen</button>
+      </div>
+    </section>
+
+    <section id="retiro" class="contenido oculto">
+      <h2>Retiro de Dinero</h2>
+      <label for="montoRetiro">Cantidad a retirar:</label>
+      <input type="number" id="montoRetiro" min="0" step="500" required />
+      <button onclick="realizarRetiro()">Confirmar retiro</button>
+    </section>
+
+    <section id="contenido" class="contenido oculto">
+      <!-- Aquí se insertará el formulario de depósito dinámicamente con innerHTML -->
+    </section>
+
+    <section id="reporte" class="contenido oculto">
+      <h2>Reporte de Cuenta</h2>
+      <p><strong>Número:</strong> <span id="reporteCuenta"></span></p>
+      <p><strong>Saldo:</strong> $<span id="reporteSaldo"></span></p>
+      <p><strong>Fecha de creación:</strong> <span id="reporteFecha"></span></p>
+      <button onclick="window.print()">Imprimir reporte</button>
+    </section>
+
+    <section id="servicios" class="contenido oculto">
+      <h2>Pago de Servicios Públicos</h2>
+      <label for="servicio">Tipo de servicio:</label>
+      <select id="servicio">
+        <option value="Energía">Energía</option>
+        <option value="Agua">Agua</option>
+        <option value="Gas">Gas</option>
+        <option value="Internet">Internet</option>
+      </select>
+      <label for="valorServicio">Monto a pagar:</label>
+      <input type="number" id="valorServicio" min="0" step="500" required />
+      <button onclick="realizarPagoServicio()">Confirmar pago</button>
+      <div id="resumenPagoServicio" class="oculto">
+        <h3>Resumen del Pago</h3>
+        <p id="detallePagoServicio"></p>
+        <button onclick="window.print()">Imprimir resumen</button>
+      </div>
+    </section>
+
+    <section id="certificado" class="contenido oculto">
+      <h2>Certificado Bancario</h2>
+      <p><strong>Banco:</strong> Banco Virtual de Daniel</p>
+      <p><strong>Titular:</strong> Daniel Santiago González Hernández</p>
+      <p><strong>Número de cuenta:</strong> <span id="certCuenta"></span></p>
+      <p><strong>Saldo actual:</strong> $<span id="certSaldo"></span></p>
+      <p><strong>Fecha de creación:</strong> <span id="certFecha"></span></p>
+      <p><strong>Fecha de emisión:</strong> <span id="certEmision"></span></p>
+      <button onclick="window.print()">Imprimir certificado</button>
+    </section>
+
+    <section id="resumenTransacciones" class="contenido oculto">
+      <h2>Resumen de Transacciones</h2>
+      <table id="tablaTransacciones" border="1" cellpadding="8" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Referencia</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaTransacciones"></tbody>
+      </table>
+      <button onclick="window.print()">Imprimir resumen</button>
+    </section>
+
+    <section id="cerrarSesion" class="contenido oculto">
+      <h2>Sesión finalizada</h2>
+      <p>Gracias por usar el Banco Virtual de Daniel.</p>
+      <p>¡Hasta pronto!</p>
+    </section>
+  </main>
+
+  <script src="./Dashboard.js"></script>
+</body>
+</html>
+
+
+
+
