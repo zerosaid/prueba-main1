@@ -182,18 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
-  // === Mostrar/Ocultar contraseña ===
-  toggleButtonLogin.addEventListener('click', () => {
-    const isPassword = passwordInputLogin.type === 'password';
-    passwordInputLogin.type = isPassword ? 'text' : 'password';
-    toggleButtonLogin.textContent = isPassword ? '🙈' : '👁️';
-  });
+// Mostrar/Ocultar contraseña
+function togglePassword(inputId, buttonElement) {
+  const input = document.getElementById(inputId);
+  const isPassword = input.type === "password";
+  input.type = isPassword ? "text" : "password";
+  buttonElement.textContent = isPassword ? "🙈" : "👁️";
+}
 
-  toggleButtonRegis.addEventListener('click', () => {
-    const isPassword = passwordInputRegis.type === 'password';
-    passwordInputRegis.type = isPassword ? 'text' : 'password';
-    toggleButtonRegis.textContent = isPassword ? '🙈' : '👁️';
-  });
+  
 
   // === Cerrar sesión desde botón menú ===
   const btnCerrarSesion = document.querySelector("button[onclick*='cerrar']");

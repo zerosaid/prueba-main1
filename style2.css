@@ -14,7 +14,7 @@ body {
   background-image: url(./imagenes/Image_13_jun_2025_03_00_17_p.m..webp);
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;    
+  background-position: center;
 }
 
 header {
@@ -31,7 +31,7 @@ main {
   background-color: var(--gris-claro-elegante);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   color: var(--dorado-metalico);
   text-shadow: 0 0 1px darkgray, 0 0 2px darkgray;
 }
@@ -79,6 +79,7 @@ button:hover {
   color: var(--dorado-metalico);
   text-shadow: 0 0 1px darkgray, 0 0 2px darkgray;
 }
+
 .input-container {
   position: relative;
   display: inline-block;
@@ -97,7 +98,7 @@ button:hover {
   position: absolute;
   right: 10px;
   top: 50%;
-  transform: translateY(-80%);
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
@@ -122,6 +123,30 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+.oculto {
+  display: none;
+}
+
+/* Campo de contraseña */
+.campo-contraseña {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.campo-contraseña input {
+  flex: 1;
+  padding: 5px;
+}
+
+.campo-contraseña button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
 }
 
 /* ============================
@@ -169,9 +194,8 @@ a:hover {
   }
 }
 
-
 /* ============================
-   📱 TABLETAS MEDIANAS (481px - 1024px)
+ 📱 TABLETAS MEDIANAS (481px - 1024px)
 ============================ */
 @media (min-width: 481px) and (max-width: 1024px) {
   main {
@@ -209,9 +233,8 @@ a:hover {
   }
 }
 
-
 /* ============================
-   🖥️ PANTALLAS GRANDES (≥ 1025px)
+ 🖥️ PANTALLAS GRANDES (≥ 1025px)
 ============================ */
 @media (min-width: 1025px) {
   main {
@@ -237,28 +260,3 @@ a:hover {
     font-size: 2rem;
   }
 }
-
-
-.oculto {
-  display: none;
-}
-
-.campo-contraseña {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.campo-contraseña input {
-  flex: 1;
-  padding: 5px;
-}
-
-.campo-contraseña button {
-  background-color: transparent;
-  border: none;
-  font-size: 1.2em;
-  cursor: pointer;
-}
-
