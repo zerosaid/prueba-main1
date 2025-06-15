@@ -77,13 +77,32 @@ document.addEventListener("DOMContentLoaded", () => {
 // =============================
 // Navegación y visualización de secciones
 // =============================
+let seccionVisible = null;
+
 function mostrarOpcion(opcion) {
-  const seccion = document.getElementById(opcion);
-  const estaVisible = seccion && !seccion.classList.contains("oculto");
+  // Excepcionalmente: si la opción es cerrar sesión, ejecutar directamente
+  if (opcion === 'cerrar') {
+    cerrarSesion();
+    seccionVisible = null;
+    return;
+  }
 
+  const nuevaSeccion = document.getElementById(opcion);
+  if (!nuevaSeccion) return;
+
+  const yaVisible = !nuevaSeccion.classList.contains("oculto");
+
+  // Si se vuelve a hacer clic en la misma sección, la ocultamos
+  if (seccionVisible === nuevaSeccion && yaVisible) {
+    nuevaSeccion.classList.add("oculto");
+    seccionVisible = null;
+    return;
+  }
+
+  // Ocultar todas las secciones con función reutilizable
   ocultarSecciones();
-  if (estaVisible) return;
 
+  // Mostrar la nueva sección según la opción
   switch (opcion) {
     case 'consignacion':
       mostrarFormularioConsignacion();
@@ -97,25 +116,37 @@ function mostrarOpcion(opcion) {
     case 'reporte':
       verReporte();
       break;
-      case 'resumen':
-        mostrarResumenTransacciones();
-        break;
+    case 'resumen':
+      mostrarResumenTransacciones();
+      break;
     case 'servicios':
-      document.getElementById("servicios").classList.remove("oculto");
+      nuevaSeccion.classList.remove("oculto");
       break;
     case 'certificado':
       mostrarCertificado();
       break;
-    case 'cerrar':
-      cerrarSesion();
-      break;
     default:
       console.warn("Opción no reconocida:", opcion);
+      return;
   }
 }
 
 function ocultarSecciones() {
-  document.querySelectorAll(".contenido").forEach(sec => sec.classList.add("oculto"));
+  const ids = [
+    "consignacion",
+    "retiro",
+    "deposito",
+    "contenido",
+    "seccionReporte",
+    "servicios",
+    "certificado",
+    "resumenTransacciones",
+    "cerrarSesion"
+  ];
+  ids.forEach(id => {
+    const elem = document.getElementById(id);
+    if (elem) elem.classList.add("oculto");
+  });
 }
 
 // =============================
