@@ -10,7 +10,6 @@ const firebaseConfig = {
   messagingSenderId: "1088604649539",
   appId: "1:1088604649539:web:c3629a654dabc7c8a7cf6f"
 };
-
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.database(app);
 
@@ -54,11 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!datosUsuario.numeroCuenta) {
     datosUsuario.numeroCuenta = generarNumeroCuenta();
     datosUsuario.fechaCreacion = obtenerFechaHoy();
-
     const index = usuarios.findIndex(u => u.nombre === nombreUsuario);
     usuarios[index] = datosUsuario;
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
-
     db.ref('usuarios/' + datosUsuario.cedula + '/numeroCuenta').set(datosUsuario.numeroCuenta);
     db.ref('usuarios/' + datosUsuario.cedula + '/fechaCreacion').set(datosUsuario.fechaCreacion);
   }
@@ -66,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   db.ref("usuarios/" + datosUsuario.cedula).once("value").then(snapshot => {
     if (snapshot.exists()) {
       usuarioActual = snapshot.val();
+      usuarioActual.cedula = datosUsuario.cedula;
       mostrarDatosUsuario();
       mostrarResumenTransacciones();
     } else {
@@ -75,15 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =============================
-// Navegación y visualización de secciones
+// Navegación
 // =============================
 let seccionVisible = null;
 
 function mostrarOpcion(opcion) {
-  // Excepcionalmente: si la opción es cerrar sesión, ejecutar directamente
   if (opcion === 'cerrar') {
     cerrarSesion();
-    seccionVisible = null;
     return;
   }
 
@@ -91,18 +87,14 @@ function mostrarOpcion(opcion) {
   if (!nuevaSeccion) return;
 
   const yaVisible = !nuevaSeccion.classList.contains("oculto");
-
-  // Si se vuelve a hacer clic en la misma sección, la ocultamos
   if (seccionVisible === nuevaSeccion && yaVisible) {
     nuevaSeccion.classList.add("oculto");
     seccionVisible = null;
     return;
   }
 
-  // Ocultar todas las secciones con función reutilizable
   ocultarSecciones();
 
-  // Mostrar la nueva sección según la opción
   switch (opcion) {
     case 'consignacion':
       mostrarFormularioConsignacion();
@@ -129,19 +121,15 @@ function mostrarOpcion(opcion) {
       console.warn("Opción no reconocida:", opcion);
       return;
   }
+
+  seccionVisible = nuevaSeccion;
 }
 
 function ocultarSecciones() {
   const ids = [
-    "consignacion",
-    "retiro",
-    "deposito",
-    "contenido",
-    "seccionReporte",
-    "servicios",
-    "certificado",
-    "resumenTransacciones",
-    "cerrarSesion"
+    "consignacion", "retiro", "deposito", "contenido",
+    "seccionReporte", "servicios", "certificado",
+    "resumenTransacciones", "cerrarSesion"
   ];
   ids.forEach(id => {
     const elem = document.getElementById(id);
@@ -150,25 +138,21 @@ function ocultarSecciones() {
 }
 
 // =============================
-// Funciones de Consignación
+// Funciones de operaciones bancarias
 // =============================
 function mostrarFormularioConsignacion() {
   document.getElementById("consignacion").classList.remove("oculto");
-  document.getElementById("cuentaUsuario").textContent = usuarioActual.numero || "---";
+  document.getElementById("cuentaUsuario").textContent = usuarioActual.numeroCuenta || "---";
   document.getElementById("nombreUsuario").textContent = usuarioActual.nombre || "---";
 }
 
 function realizarConsignacion() {
   const monto = parseFloat(document.getElementById("montoConsignar").value);
-
-  if (isNaN(monto) || monto <= 0) {
-    alert("Por favor, ingresa un valor válido mayor que 0.");
-    return;
-  }
+  if (isNaN(monto) || monto <= 0) return alert("Ingrese un valor válido.");
 
   usuarioActual.saldo = (usuarioActual.saldo || 0) + monto;
 
-  const transaccion = {
+  const tx = {
     fecha: obtenerFechaHoy(),
     referencia: generarReferencia(),
     tipo: "Consignación",
@@ -177,7 +161,7 @@ function realizarConsignacion() {
   };
 
   usuarioActual.transacciones = usuarioActual.transacciones || [];
-  usuarioActual.transacciones.push(transaccion);
+  usuarioActual.transacciones.push(tx);
 
   db.ref("usuarios/" + usuarioActual.cedula).update({
     saldo: usuarioActual.saldo,
@@ -185,8 +169,8 @@ function realizarConsignacion() {
   });
 
   document.getElementById("detalleConsignacion").innerHTML = `
-    Se consignaron <strong>$${monto.toLocaleString()}</strong> a la cuenta <strong>${usuarioActual.numero}</strong><br>
-    Fecha: ${transaccion.fecha} | Ref: ${transaccion.referencia}
+    Se consignaron <strong>$${monto.toLocaleString()}</strong> a la cuenta <strong>${usuarioActual.numeroCuenta}</strong><br>
+    Fecha: ${tx.fecha} | Ref: ${tx.referencia}
   `;
   document.getElementById("resumenConsignacion").classList.remove("oculto");
 
@@ -195,9 +179,6 @@ function realizarConsignacion() {
   document.getElementById("montoConsignar").value = "";
 }
 
-// =============================
-// Funciones de Retiro
-// =============================
 function retirar() {
   document.getElementById("retiro").classList.remove("oculto");
   document.getElementById("cuentaUsuarioRetiro").textContent = usuarioActual.numeroCuenta || "---";
@@ -206,20 +187,12 @@ function retirar() {
 
 function realizarRetiro() {
   const monto = parseFloat(document.getElementById("montoRetirar").value);
-
-  if (isNaN(monto) || monto <= 0) {
-    alert("Ingrese un monto válido.");
-    return;
-  }
-
-  if (usuarioActual.saldo < monto) {
-    alert("Saldo insuficiente.");
-    return;
-  }
+  if (isNaN(monto) || monto <= 0) return alert("Ingrese un monto válido.");
+  if (usuarioActual.saldo < monto) return alert("Saldo insuficiente.");
 
   usuarioActual.saldo -= monto;
 
-  const transaccion = {
+  const tx = {
     fecha: obtenerFechaHoy(),
     referencia: generarReferencia(),
     tipo: "Retiro",
@@ -228,23 +201,20 @@ function realizarRetiro() {
   };
 
   usuarioActual.transacciones = usuarioActual.transacciones || [];
-  usuarioActual.transacciones.push(transaccion);
+  usuarioActual.transacciones.push(tx);
 
   db.ref("usuarios/" + usuarioActual.cedula).update({
     saldo: usuarioActual.saldo,
     transacciones: usuarioActual.transacciones
   });
 
-  document.getElementById("detalleRetiro").textContent = `Retiraste $${monto.toLocaleString()} el ${transaccion.fecha} (Ref: ${transaccion.referencia})`;
+  document.getElementById("detalleRetiro").textContent = `Retiraste $${monto.toLocaleString()} el ${tx.fecha} (Ref: ${tx.referencia})`;
   document.getElementById("resumenRetiro").classList.remove("oculto");
 
   mostrarDatosUsuario();
   mostrarResumenTransacciones();
 }
 
-// =============================
-// Funciones de Depósito
-// =============================
 function depositar() {
   document.getElementById("deposito").classList.remove("oculto");
   document.getElementById("cuentaUsuarioDeposito").textContent = usuarioActual.numeroCuenta || "---";
@@ -253,15 +223,11 @@ function depositar() {
 
 function realizarDeposito() {
   const monto = parseFloat(document.getElementById("montoDepositar").value);
-
-  if (isNaN(monto) || monto <= 0) {
-    alert("Ingrese un monto válido.");
-    return;
-  }
+  if (isNaN(monto) || monto <= 0) return alert("Ingrese un monto válido.");
 
   usuarioActual.saldo += monto;
 
-  const transaccion = {
+  const tx = {
     fecha: obtenerFechaHoy(),
     referencia: generarReferencia(),
     tipo: "Depósito",
@@ -270,14 +236,14 @@ function realizarDeposito() {
   };
 
   usuarioActual.transacciones = usuarioActual.transacciones || [];
-  usuarioActual.transacciones.push(transaccion);
+  usuarioActual.transacciones.push(tx);
 
   db.ref("usuarios/" + usuarioActual.cedula).update({
     saldo: usuarioActual.saldo,
     transacciones: usuarioActual.transacciones
   });
 
-  document.getElementById("detalleDeposito").textContent = `Depositaste $${monto.toLocaleString()} el ${transaccion.fecha} (Ref: ${transaccion.referencia})`;
+  document.getElementById("detalleDeposito").textContent = `Depositaste $${monto.toLocaleString()} el ${tx.fecha} (Ref: ${tx.referencia})`;
   document.getElementById("resumenDeposito").classList.remove("oculto");
 
   mostrarDatosUsuario();
@@ -285,25 +251,17 @@ function realizarDeposito() {
 }
 
 // =============================
-// Funciones de Pago de Servicios
+// Pago de Servicios
 // =============================
 function realizarPagoServicio() {
   const tipo = document.getElementById("servicio").value;
   const monto = parseFloat(document.getElementById("valorServicio").value);
-
-  if (isNaN(monto) || monto <= 0) {
-    alert("Ingrese un monto válido.");
-    return;
-  }
-
-  if (monto > usuarioActual.saldo) {
-    alert("Saldo insuficiente.");
-    return;
-  }
+  if (isNaN(monto) || monto <= 0) return alert("Monto inválido.");
+  if (monto > usuarioActual.saldo) return alert("Saldo insuficiente.");
 
   usuarioActual.saldo -= monto;
 
-  const transaccion = {
+  const tx = {
     fecha: obtenerFechaHoy(),
     referencia: generarReferencia(),
     tipo: "Pago de servicios",
@@ -312,7 +270,7 @@ function realizarPagoServicio() {
   };
 
   usuarioActual.transacciones = usuarioActual.transacciones || [];
-  usuarioActual.transacciones.push(transaccion);
+  usuarioActual.transacciones.push(tx);
 
   db.ref("usuarios/" + usuarioActual.cedula).update({
     saldo: usuarioActual.saldo,
@@ -325,51 +283,35 @@ function realizarPagoServicio() {
   document.getElementById("detallePagoServicio").innerHTML = `
     Servicio: ${tipo}<br>
     Monto: $${monto.toLocaleString()}<br>
-    Fecha: ${transaccion.fecha}<br>
-    Referencia: ${transaccion.referencia}
+    Fecha: ${tx.fecha}<br>
+    Referencia: ${tx.referencia}
   `;
   document.getElementById("resumenPagoServicio").classList.remove("oculto");
   document.getElementById("valorServicio").value = "";
 }
 
 // =============================
-// Función de Reporte de Cuenta
+// Reporte y certificado
 // =============================
 function verReporte() {
-  document.getElementById("reporteNombre").textContent = usuarioActual.nombre || "---";
-  document.getElementById("reporteCedula").textContent = usuarioActual.cedula || "---";
-  document.getElementById("reporteCuenta").textContent = usuarioActual.numero || "---";
-  document.getElementById("reporteFecha").textContent = usuarioActual.fechaCreacion || "---";
+  if (!usuarioActual) return console.warn("Usuario no cargado.");
+  document.getElementById("reporteNombre").textContent = usuarioActual.nombre;
+  document.getElementById("reporteCedula").textContent = usuarioActual.cedula;
+  document.getElementById("reporteCuenta").textContent = usuarioActual.numeroCuenta;
+  document.getElementById("reporteFecha").textContent = usuarioActual.fechaCreacion;
   document.getElementById("reporteSaldo").textContent = "$" + Number(usuarioActual.saldo || 0).toLocaleString();
-
-  ocultarSecciones();
   document.getElementById("seccionReporte").classList.remove("oculto");
 }
 
-
-// =============================
-// Función para mostrar certificado bancario
-// =============================
 function mostrarCertificado() {
-  if (!usuarioActual) {
-    alert("No se ha cargado la información del usuario.");
-    return;
-  }
-
-  // Asignar los valores al certificado
-  document.getElementById("titular").textContent = usuarioActual.nombre || "---";
-  document.getElementById("certCuenta").textContent = usuarioActual.numeroCuenta || "---";
-  document.getElementById("certSaldo").textContent = Number(usuarioActual.saldo || 0).toLocaleString();
-  document.getElementById("certFecha").textContent = usuarioActual.fechaCreacion || "---";
-
-  const fechaEmision = new Date().toLocaleDateString("es-CO", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric"
+  if (!usuarioActual) return alert("No se ha cargado la información.");
+  document.getElementById("titular").textContent = usuarioActual.nombre;
+  document.getElementById("certCuenta").textContent = usuarioActual.numeroCuenta;
+  document.getElementById("certSaldo").textContent = "$" + Number(usuarioActual.saldo || 0).toLocaleString();
+  document.getElementById("certFecha").textContent = usuarioActual.fechaCreacion;
+  document.getElementById("certEmision").textContent = new Date().toLocaleDateString("es-CO", {
+    day: "2-digit", month: "long", year: "numeric"
   });
-  document.getElementById("certEmision").textContent = fechaEmision;
-
-  // Mostrar la sección del certificado
   ocultarSecciones();
   document.getElementById("certificado").classList.remove("oculto");
 }
@@ -381,22 +323,16 @@ function mostrarResumenTransacciones() {
   const tabla = document.getElementById("cuerpoTablaTransacciones");
   const seccion = document.getElementById("resumenTransacciones");
 
-  if (!tabla || !seccion) {
-    console.warn("No se encontró el contenedor de transacciones.");
-    return;
-  }
+  if (!tabla || !seccion) return console.warn("Falta el contenedor");
 
-  // Limpiar tabla antes de insertar filas nuevas
   tabla.innerHTML = "";
 
-  // Verificar si hay transacciones
   if (!usuarioActual.transacciones || usuarioActual.transacciones.length === 0) {
     tabla.innerHTML = `<tr><td colspan="5" style="text-align:center;">Sin movimientos registrados</td></tr>`;
     seccion.classList.remove("oculto");
     return;
   }
 
-  // Insertar cada transacción como fila en la tabla
   usuarioActual.transacciones.forEach(tx => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
@@ -409,14 +345,12 @@ function mostrarResumenTransacciones() {
     tabla.appendChild(fila);
   });
 
-  // Mostrar la sección
   ocultarSecciones();
   seccion.classList.remove("oculto");
 }
 
-
 // =============================
-// Funciones Auxiliares
+// Auxiliares
 // =============================
 function generarNumeroCuenta() {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString();
@@ -444,22 +378,22 @@ function generarReferencia() {
 }
 
 // =============================
-// Menú hamburguesa (solo móviles)
+// Menú hamburguesa
 // =============================
 const toggleBtn = document.getElementById("hamburguesa");
 const menuNav = document.getElementById("menu");
 
-// Mostrar u ocultar el menú al hacer clic en el botón
-toggleBtn.addEventListener("click", () => {
-  menuNav.classList.toggle("mostrar");
-});
-
-// Cerrar el menú automáticamente si se hace clic en una opción del menú
-const botonesMenu = menuNav.querySelectorAll("button");
-botonesMenu.forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-      menuNav.classList.remove("mostrar");
-    }
+if (toggleBtn && menuNav) {
+  toggleBtn.addEventListener("click", () => {
+    menuNav.classList.toggle("mostrar");
   });
-});
+
+  const botonesMenu = menuNav.querySelectorAll("button");
+  botonesMenu.forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (window.innerWidth <= 768) {
+        menuNav.classList.remove("mostrar");
+      }
+    });
+  });
+}
