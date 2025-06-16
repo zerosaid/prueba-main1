@@ -105,9 +105,10 @@ function mostrarOpcion(opcion) {
     case 'deposito':
       depositar();
       break;
-    case 'reporte':
-      verReporte();
-      break;
+      case 'reporte':
+        generarExtracto();
+        break;
+      
     case 'resumen':
       mostrarResumenTransacciones();
       break;
@@ -293,15 +294,16 @@ function realizarPagoServicio() {
 // =============================
 // Reporte y certificado
 // =============================
-function verReporte() {
+function generarExtracto() {
   if (!usuarioActual) return console.warn("Usuario no cargado.");
   document.getElementById("reporteNombre").textContent = usuarioActual.nombre;
-  document.getElementById("reporteCedula").textContent = usuarioActual.cedula;
   document.getElementById("reporteCuenta").textContent = usuarioActual.numeroCuenta;
-  document.getElementById("reporteFecha").textContent = usuarioActual.fechaCreacion;
-  document.getElementById("reporteSaldo").textContent = "$" + Number(usuarioActual.saldo || 0).toLocaleString();
   document.getElementById("seccionReporte").classList.remove("oculto");
+
+  // Vaciar resultados anteriores
+  document.getElementById("tablaExtracto").innerHTML = "";
 }
+
 
 function mostrarCertificado() {
   if (!usuarioActual) return alert("No se ha cargado la información.");
@@ -395,5 +397,43 @@ if (toggleBtn && menuNav) {
         menuNav.classList.remove("mostrar");
       }
     });
+  });
+}
+ // =============================
+ // Filtro de mes por año
+ // =============================
+
+ function filtrarTransaccionesPorFecha() {
+  const anio = parseInt(document.getElementById("anio").value);
+  const mes = parseInt(document.getElementById("mes").value);
+
+  const cuerpoTabla = document.getElementById("tablaExtracto");
+  cuerpoTabla.innerHTML = "";
+
+  if (!usuarioActual.transacciones || usuarioActual.transacciones.length === 0) {
+    cuerpoTabla.innerHTML = `<tr><td colspan="5">No hay transacciones registradas.</td></tr>`;
+    return;
+  }
+
+  const transaccionesFiltradas = usuarioActual.transacciones.filter(tx => {
+    const fecha = new Date(tx.fecha);
+    return fecha.getFullYear() === anio && fecha.getMonth() + 1 === mes;
+  });
+
+  if (transaccionesFiltradas.length === 0) {
+    cuerpoTabla.innerHTML = `<tr><td colspan="5">No se encontraron transacciones en ${mes}/${anio}.</td></tr>`;
+    return;
+  }
+
+  transaccionesFiltradas.forEach(tx => {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${tx.fecha}</td>
+      <td>${tx.referencia}</td>
+      <td>${tx.tipo}</td>
+      <td>${tx.descripcion}</td>
+      <td>$${Number(tx.valor).toLocaleString()}</td>
+    `;
+    cuerpoTabla.appendChild(fila);
   });
 }
